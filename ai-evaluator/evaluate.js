@@ -6,6 +6,7 @@ const { Command } = require('commander');
 const OllamaAdapter = require('./adapters/ollama');
 const AnthropicAdapter = require('./adapters/anthropic');
 const OpenRouterAdapter = require('./adapters/openrouter');
+const GroqAdapter = require('./adapters/groq');
 
 const program = new Command();
 
@@ -73,6 +74,9 @@ Evaluate the analysis based on the rubric and provide your feedback using the ex
       break;
     case 'openrouter':
       adapter = new OpenRouterAdapter(config);
+      break;
+    case 'groq':
+      adapter = new GroqAdapter(config);
       break;
     default:
       console.error(`Unsupported provider: ${config.provider}`);
