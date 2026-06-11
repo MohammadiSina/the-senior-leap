@@ -115,7 +115,7 @@ Feedback is printed to the terminal and saved as `my-evaluation.md` alongside yo
 - Direct answers to your stated questions
 - One thing to focus on next
 
-Supports both local models via [Ollama](https://ollama.com) and cloud via the Anthropic API. **Recommended local models:** `llama3.2`, `qwen2.5-coder`
+Supports local models through [Ollama](https://ollama.com), plus cloud options including the Anthropic and OpenRouter. **Recommended local models:** `llama3.2`, `qwen2.5-coder`
 
 The evaluator runs on an internal system prompt that keeps feedback structured and consistent across models. It's readable in [`ai-evaluator/prompts/system.md`](./ai-evaluator/prompts/system.md) if you're curious, but you don't need to touch it.
 
