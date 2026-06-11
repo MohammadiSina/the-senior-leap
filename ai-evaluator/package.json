@@ -1,0 +1,16 @@
+{
+  "name": "the-senior-leap-evaluator",
+  "version": "1.0.0",
+  "description": "AI evaluator for The Senior Leap exercises",
+  "main": "evaluate.js",
+  "bin": {
+    "evaluate": "./evaluate.js"
+  },
+  "scripts": {
+    "eval": "node evaluate.js"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "js-yaml": "^4.1.0"
+  }
+}
