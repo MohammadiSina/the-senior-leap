@@ -1,0 +1,12 @@
+{
+  "name": "stream-backpressure-pipeline",
+  "version": "1.0.0",
+  "description": "Data processing pipeline that crashes under load. Find why.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
