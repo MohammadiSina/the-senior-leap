@@ -2,7 +2,7 @@
 
 > Hands-on exercises, rubrics, and AI-assisted evaluation for engineers closing the gap to senior.
 
-![Cover Image](./.assets/cover.png)
+![Demo](./.assets/demo.gif)
 
 ---
 
