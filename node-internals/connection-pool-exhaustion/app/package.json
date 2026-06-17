@@ -1,0 +1,12 @@
+{
+  "name": "connection-pool-exhaustion",
+  "version": "1.0.0",
+  "description": "Order API with connection pool exhaustion bugs. Find why requests hang while the database is fine.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
