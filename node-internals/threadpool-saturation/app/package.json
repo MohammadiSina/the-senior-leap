@@ -1,0 +1,12 @@
+{
+  "name": "threadpool-saturation",
+  "version": "1.0.0",
+  "description": "Auth & avatar API where password hashing and image reads slow each other down — even though CPU is idle and the database is never involved.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
