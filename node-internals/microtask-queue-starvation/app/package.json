@@ -1,0 +1,12 @@
+{
+  "name": "microtask-queue-starvation",
+  "version": "1.0.0",
+  "description": "Report service with chunked processing. Find why health checks still stall after the fix.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
