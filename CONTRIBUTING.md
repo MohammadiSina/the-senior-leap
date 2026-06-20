@@ -10,6 +10,8 @@ The bar for a good exercise is not *"does this convey information"* but *"does t
 
 Check open issues and existing exercises to avoid duplicating something already in progress. If you have an idea but aren't sure it fits, open an issue to discuss it before building it out.
 
+**Check for a topic-level `GUIDE.md`.** Some topics include a `GUIDE.md` in their directory that specifies additional standards, exercise patterns, structural decisions, and quality criteria specific to that topic. If one exists for the topic you are contributing to, read it before writing anything — it takes precedence over the general guidance in this file where the two differ.
+
 ---
 
 ## Using the Template
@@ -18,6 +20,15 @@ Every exercise lives in its own folder inside the relevant topic directory. Star
 
 ```bash
 cp -r _template/ topic-name/your-exercise-name
+```
+
+**Some topics include their own `_template/` directory** for files that differ from the root template. If the topic has a `_template/`, use those files instead of their root counterparts. For any file not present in the topic template, fall back to the root `_template/`.
+
+```bash
+# Example: system-design has its own _template/
+cp system-design/_template/README.md system-design/your-exercise-name/README.md
+cp system-design/_template/rubric.md system-design/your-exercise-name/rubric.md
+cp _template/my-analysis.md system-design/your-exercise-name/my-analysis.md
 ```
 
 Folder names should be lowercase, hyphenated, and describe the scenario specifically.
@@ -70,7 +81,7 @@ Aim for three to five items. A rubric with fifteen points buries what actually m
 
 For code exercises: the fixed or reference implementation with inline comments that explain not just what changed, but why — the reasoning, not just the diff.
 
-For system design: a reference design document. Make clear this is *a* reasonable answer, not *the* answer. Tradeoff notes are more valuable than confident declarations.
+Some conceptual topics replace `solution/` with a Reference Reasoning section inside `rubric.md`.
 
 ### `my-analysis.md`
 
@@ -98,6 +109,7 @@ Before opening a PR, run through this honestly:
 - [ ] If there's a runnable app, does it work on a clean setup with one or two commands?
 - [ ] Is the tutorial lean enough that someone who knows the topic can skip it without missing anything for the exercise?
 - [ ] Are there three to five focused rubric items rather than an exhaustive list?
+- [ ] If the topic has a `GUIDE.md`, does the exercise meet the criteria it defines?
 
 ---
 
