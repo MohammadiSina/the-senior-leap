@@ -36,7 +36,7 @@ topic/exercise-name/
 ├── app/              ← a broken or incomplete app (where applicable)
 ├── rubric.md         ← what a senior engineer would notice (open AFTER your attempt)
 ├── my-analysis.md    ← write your findings here before looking at anything else
-└── solution/         ← reference solution or design
+└── solution/         ← reference solution, or Reference Reasoning in rubric.md for conceptual exercises
 ```
 
 **The order matters:**
@@ -53,18 +53,18 @@ The rubric is not a pass/fail test. It's written from the perspective of a senio
 
 ## Topics
 
-| Topic             | Exercises                                                  | Status        |
-| ----------------- | ---------------------------------------------------------- | ------------- |
-| Node.js Internals | Event loop, V8 heap, memory leaks, streams, worker threads | 🚧 In progress |
-| System Design     | URL shortener, rate limiter, notification service          | 🚧 In progress |
-| Docker            | Multi-stage builds, layer caching, Compose networking      | 📋 Planned     |
-| Databases         | Index strategies, N+1 problem, transaction isolation       | 📋 Planned     |
-| Observability     | Structured logging, distributed tracing, alerting          | 📋 Planned     |
-| Concurrency       | Race conditions, deadlocks, async hazards in Node          | 📋 Planned     |
-| Testing Strategy  | Test pyramid in practice, contract testing                 | 📋 Planned     |
-| Debugging         | Production incident simulations, post-mortems              | 📋 Planned     |
-| Technical Writing | Architecture Decision Records, RFCs                        | 📋 Planned     |
-| Security          | Auth patterns, OWASP scenarios                             | 📋 Planned     |
+| Topic             | Exercises                                                                                  | Status        |
+| ----------------- | ------------------------------------------------------------------------------------------ | ------------- |
+| Node.js Internals | Event loop, V8 heap, memory leaks, streams, worker threads                                 | 🚧 In progress |
+| System Design     | Queue disaster under campaign spike, Rate limit semantics shift, Cold-cache redirect storm | 🚧 In progress |
+| Docker            | Multi-stage builds, layer caching, Compose networking                                      | 📋 Planned     |
+| Databases         | Index strategies, N+1 problem, transaction isolation                                       | 📋 Planned     |
+| Observability     | Structured logging, distributed tracing, alerting                                          | 📋 Planned     |
+| Concurrency       | Race conditions, deadlocks, async hazards in Node                                          | 📋 Planned     |
+| Testing Strategy  | Test pyramid in practice, contract testing                                                 | 📋 Planned     |
+| Debugging         | Production incident simulations, post-mortems                                              | 📋 Planned     |
+| Technical Writing | Architecture Decision Records, RFCs                                                        | 📋 Planned     |
+| Security          | Auth patterns, OWASP scenarios                                                             | 📋 Planned     |
 
 ---
 
@@ -104,8 +104,8 @@ The evaluator works entirely through files. Before running it, fill in your `my-
 ```bash
 cd ai-evaluator
 cp config.example.yml config.yml
-# Edit config.yml — set provider to "ollama" or "anthropic"
-node evaluate.js --exercise ../system-design/url-shortener
+# Edit config.yml — set your provider and model
+node evaluate.js --exercise ../system-design/queue-disaster
 ```
 
 Feedback is printed to the terminal and saved as `my-evaluation.md` alongside your analysis. It covers:
@@ -115,7 +115,7 @@ Feedback is printed to the terminal and saved as `my-evaluation.md` alongside yo
 - Direct answers to your stated questions
 - One thing to focus on next
 
-Supports local models through [Ollama](https://ollama.com), plus cloud options including the Anthropic and OpenRouter. **Recommended local models:** `llama3.2`, `qwen2.5-coder`
+Supports local models through [Ollama](https://ollama.com), plus cloud options including Anthropic, OpenRouter, and Groq. **Recommended local models:** `llama3.1:8b`, `qwen2.5:7b`
 
 The evaluator runs on an internal system prompt that keeps feedback structured and consistent across models. It's readable in [`ai-evaluator/prompts/system.md`](./ai-evaluator/prompts/system.md) if you're curious, but you don't need to touch it.
 
@@ -149,4 +149,4 @@ To stay focused, this repo intentionally does not cover:
 
 ## License
 
-MIT
+Licensed under the MIT License. See [`LICENSE.md`](./LICENSE) for details.
