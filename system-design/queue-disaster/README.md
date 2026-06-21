@@ -16,7 +16,7 @@ graph TD
   B --> C[(Redis Queue)]
   C --> D[Worker Pool — 4 instances]
   D --> E[Email Provider API]
-  D --> F[(PostgreSQL\nDelivery Tracking)]
+  D --> F[(PostgreSQL<br/>Delivery Tracking)]
 ```
 
 Workers dequeue messages from Redis in batches of 500 using RPOPLPUSH — each batch moves atomically from the main queue into a separate in-flight set. A recovery job runs every 60 seconds and re-enqueues any messages that have been in the in-flight set for more than 90 seconds without acknowledgment. Workers do not pass a deduplication parameter to the email provider API.
@@ -37,7 +37,7 @@ Workers dequeue messages from Redis in batches of 500 using RPOPLPUSH — each b
 **Metrics — 500k test campaign:**
 
 | Time (UTC) | Queue Depth | Active Workers | Error Rate | p99 Latency | Worker Avg Heap |
-|------------|-------------|----------------|------------|-------------|-----------------|
+| ---------- | ----------- | -------------- | ---------- | ----------- | --------------- |
 | 03:08      | 412,000     | 4              | 0.0%       | 95ms        | 285MB           |
 | 03:31      | 248,000     | 4              | 0.3%       | 340ms       | 520MB           |
 | 03:47      | 198,000     | 4              | 5.1%       | 4,800ms     | 890MB           |
