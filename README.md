@@ -149,4 +149,4 @@ To stay focused, this repo intentionally does not cover:
 
 ## License
 
-Licensed under the MIT License. See [`LICENSE.md`](./LICENSE) for details.
+Licensed under the MIT License. See [`LICENSE`](./LICENSE) for details.
