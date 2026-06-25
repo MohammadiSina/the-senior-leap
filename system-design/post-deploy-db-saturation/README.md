@@ -1,4 +1,4 @@
-# Cache Stampede
+# Post-Deploy DB Saturation
 
 > The post-mortem meeting is in 30 minutes. The slide deck says "root cause: deploy failure." You've been staring at the metrics for the last hour and something doesn't add up.
 
@@ -40,7 +40,7 @@ Here is the full evidence from the incident window.
 **Metrics:**
 
 | Time (UTC) | Req/s | Cache Hit Rate | DB Connections | DB CPU | Error Rate | p99 Latency |
-|------------|-------|----------------|----------------|--------|------------|-------------|
+| ---------- | ----- | -------------- | -------------- | ------ | ---------- | ----------- |
 | 14:21:50   | 340   | 94%            | 12 / 100       | 8%     | 0.1%       | 85ms        |
 | 14:22:08   | 342   | 0%             | 100 / 100      | 94%    | 0.8%       | 290ms       |
 | 14:22:15   | 338   | 0%             | 100 / 100      | 100%   | 34.2%      | 8,400ms     |
@@ -57,13 +57,15 @@ Write your analysis in `my-analysis.md`. Cover:
 
 1. **Before proposing anything, write down the questions you would ask first.** What does the evidence not yet answer? What assumptions in the current architecture are you most uncertain about? Are there data points in the metrics table that do not fit the current root cause hypothesis — and if so, what would need to be true for them to fit?
 
-2. **Read the evidence and identify the actual root cause.** The post-mortem draft attributes this to "deploy failure." Work through the 14:22:08 row specifically — request rate, cache hit rate, and DB connections together. What does that combination tell you? What does it rule out?
+2. **Diagnose the actual failure mode.** The post-mortem draft attributes this to "deploy failure." Work through the 14:22:08 row specifically — request rate, cache hit rate, and DB connections together. What specific phenomenon does that combination prove is happening to the database? What does it rule out?
 
-3. **Name the design weakness.** What structural property of the cache layer made this outcome inevitable given a full cache flush? Would a different deploy process have prevented it — or would the same failure mode occur under other conditions? Be specific about what those other conditions are.
+3. **Evaluate the trigger and the design weakness.** First, was the `FLUSHDB` command actually necessary for the specific schema change described in the scenario? Second, what structural property of the cache layer made this outcome inevitable given a full cache flush? Would the same failure mode occur under other conditions even if `FLUSHDB` was removed from the deploy script? Be specific about what those other conditions are.
 
 4. **Evaluate the proposed action item.** The retrospective's current recommendation is a 90-second rollback procedure. Would that have prevented this incident? Trace what a rollback at 14:23:00 would actually have done, step by step.
 
-5. **Propose what should change and what risks remain.** What changes to the caching architecture prevent this? For each change, name what failure mode it prevents — specifically, not in general terms. After your changes, what failure modes remain and why are they acceptable?
+5. **Analyze the recovery.** The on-call engineer declared the incident resolved at 14:28:30. Look closely at the metrics at that exact timestamp. Was the system actually recovered? What monitoring gap allowed the team to declare success while the database was still under abnormal stress?
+   
+6. **Propose what should change and what risks remain.** What changes to the caching architecture and deploy process prevent this? For each change, name what failure mode it prevents — specifically, not in general terms. After your changes, what failure modes remain and why are they acceptable?
 
 Write your full reasoning in `my-analysis.md` before opening `rubric.md`.
 
@@ -71,7 +73,7 @@ Write your full reasoning in `my-analysis.md` before opening `rubric.md`.
 
 ## Prerequisites
 
-If cache-aside pattern and cache stampede mechanics are unfamiliar, read `tutorial.md` first. Otherwise, jump straight in.
+If the cache-aside pattern and concurrent cache rebuild mechanics are unfamiliar, read `tutorial.md` first. Otherwise, jump straight in.
 
 ---
 
@@ -83,5 +85,5 @@ To get AI-assisted feedback on your reasoning — especially useful for the unce
 
 ```bash
 cd ../../ai-evaluator
-node evaluate.js --exercise ../system-design/cache-stampede
+node evaluate.js --exercise ../system-design/post-deploy-db-saturation
 ```
