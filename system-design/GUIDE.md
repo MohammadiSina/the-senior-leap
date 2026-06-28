@@ -7,11 +7,29 @@
 
 ## Philosophy
 
-System design exercises here test how senior engineers reason, not what they have memorized. A mid-level engineer who has read a system design book can describe consistent hashing, CAP theorem, and load balancing. A senior engineer knows which of those matters for a given situation, what to ignore, and — critically — what questions to ask before drawing any diagram.
+This is a teaching project. Scenarios are the vehicle, not the product.
 
-The exercises never give learners a blank canvas. They give a situation: something breaking, something changing, a decision that needs a defense. The forcing function is always specific. The correct answer depends on the context given, not on recall of generic patterns.
+The goal is to give engineers who haven't yet worked in complex production environments the experience of facing production-grade problems — the kind of reasoning they would be forced to develop on the job, compressed into exercises they can do alone. Many learners are between jobs, early in their careers, or at companies where this class of problem simply doesn't arise. That is who this is for.
 
-The gap this topic targets is not "does the learner know the patterns." It is: does the learner know what to worry about first, what questions reveal the dominant constraint, and what a reasonable design looks like under realistic pressure?
+Senior engineers are distinguished not by knowing more patterns than mid-level engineers, but by knowing which pattern matters here, what questions to ask before applying it, and what will fail under this set of conditions. Standard resources teach what the patterns are. These exercises make learners apply them under conditions that require genuine judgment.
+
+The exercises are not designed to be cheat-proof. If a learner wants to look something up or use an AI, they can — nothing stops that. But a learner who does will shortcut exactly the reasoning the exercise is designed to build. The goal is to create conditions where working through the problem honestly produces more value than bypassing it.
+
+The standard for a good exercise is not *"is this scenario hard to google."* It is *"does engaging honestly with this scenario build the reasoning it targets — and would a generic answer for this problem type fail against the specific conditions given?"*
+
+---
+
+## What Exercises Can Teach
+
+Not all exercises teach the same kind of reasoning. The set should cover the spectrum, but most exercises should be of the first type:
+
+**Applying a known pattern correctly under specific production conditions.** The learner may know what a thundering herd is, or what sliding window rate limiting looks like, or how to migrate a PostgreSQL column. The exercise creates conditions — load characteristics, schema constraints, live traffic requirements, failure timelines — where the generic answer breaks. The learning happens at the point where a prepared candidate discovers their standard solution doesn't fit. This is the most common and most broadly useful exercise type.
+
+**Recognizing when the problem requires more than technical judgment.** Occasionally, the senior skill being tested is identifying that engineering cannot solve this unilaterally — that the right answer is a different kind of output entirely. Exercises in this category are valuable but narrow. Include them deliberately, not by default.
+
+The canonical example in this repo is `erasure-request`: both assessed technical options (crypto-shredding, dual-model PII extraction) are ruled out before the learner starts — one by outside counsel, one by the structure of the event store. The exercise task is not to propose a third architecture. It is to identify what engineering brings to a cross-functional meeting, what decisions need to come out of it, and who owns each one. The senior skill being tested is recognizing that the problem has moved out of engineering's lane — and knowing what to do with that. An exercise in this category must rule out the technical path clearly enough that the learner cannot mistake it for a technical exercise with an unusual solution.
+
+When building an exercise, decide which type it is before writing anything. Most of the rubric design, scenario framing, and task structure follows from that decision.
 
 ---
 
@@ -19,21 +37,26 @@ The gap this topic targets is not "does the learner know the patterns." It is: d
 
 Before finalizing any exercise, apply this test:
 
-> **Can a candidate solve this by regurgitating a system design interview book?**
+> **Can a candidate produce a correct answer without reasoning through the specific conditions given in this scenario?**
 
-If yes, the exercise fails. It is too close to "design a URL shortener."
+If yes, the exercise fails. A generic answer for this problem type should not pass.
 
-An exercise fails this test if:
-- It asks the learner to "design X" without a specific failure, constraint, or decision point
-- The scenario can be answered correctly using only knowledge of the named system, with no additional context
-- The rubric items are topic categories rather than specific observations
-- A mid-level and a senior engineer could produce indistinguishable outputs
+This is not the same as asking whether the scenario involves a named pattern. Named patterns are acceptable — even expected. The question is whether the specific conditions in the scenario change what a correct answer looks like. If sliding window semantics are the subject, that's fine: the exercise should create conditions — an existing customer base with behavior expectations, a live migration requirement, a specific traffic pattern — where the implementation and the migration plan depend on reading this scenario carefully, not on recalling the general sliding window approach.
 
-**Never do this:**
-- "Design a URL shortener"
-- "Design a notification service"
-- "Design a rate limiter"
-- "Explain where Redis helps and where it hurts" — this is a knowledge test with a narrative wrapper; any engineer who has read the Redis documentation can pass it
+An exercise fails the litmus test if:
+- The scenario can be answered correctly by describing the named pattern without engaging the specific constraints
+- A rubric item can be satisfied by recalling general knowledge rather than reasoning against the evidence in the README
+- A mid-level engineer who has read about this topic and a senior engineer who has shipped it would produce indistinguishable outputs
+
+**Examples of exercises that fail this test:**
+- "Design a rate limiter" — no conditions narrow which design is correct
+- "Explain where Redis helps and where it hurts" — knowledge test with a narrative wrapper
+- "Design a notification service" — pattern recall produces a passing answer
+
+**Examples that pass this test despite involving named patterns:**
+- A rate limiter migration where 847 existing customers have behavior expectations, the manager has publicly committed to the approach, and three live instances must maintain consistent enforcement during rollout — the named pattern is the entry point, not the answer
+- A cache stampede incident where the analysis task is to evaluate whether the triggering action was even necessary for the stated schema change, and whether the proposed fix (rollback) would have made things worse
+- A distributed lock problem where both investigations correctly ruled out the obvious failure modes, and the root cause lives in a relationship between P99 duration and TTL that neither investigation thought to check
 
 ---
 
@@ -49,7 +72,7 @@ A system that worked under previous conditions is failing under new ones. The le
 
 **Strength: High.** The forcing function is concrete — something specific is failing, not "the system could be better."
 
-**Key requirement:** Name exactly what is breaking and under what conditions. "The system is slow" is too vague. "The notification queue grows unboundedly during batch campaigns over 500k recipients, and workers begin crashing" is specific enough to reason against.
+**Key requirement:** Name exactly what is breaking and under what conditions. "The system is slow" is too vague. "The notification queue grows unboundedly during batch campaigns over 500k recipients, and workers begin crashing" is specific enough to reason against. The conditions that cause the failure should create genuine diagnostic work — ideally, the obvious explanation should be something the evidence rules out.
 
 ---
 
@@ -89,7 +112,7 @@ A system must move from state A to state B under a hard constraint: zero downtim
 
 **Strength: High.** Migration is one of the highest-value senior skills and is almost never covered in standard resources. The rubric can surface dual-write hazards, backfill sequencing, consistency verification, rollback triggers — observations that only come from having shipped migrations.
 
-**Key requirement:** The constraint must be real and specific. "Zero downtime" is only meaningful if the exercise specifies current traffic volume and write rate.
+**Key requirement:** The constraint must be real and specific. "Zero downtime" is only meaningful if the exercise specifies current traffic volume and write rate. The most instructive scenarios are those where a naive migration produces a subtly wrong outcome — not a crash, but a violation that might not be noticed immediately.
 
 ---
 
@@ -109,7 +132,7 @@ A specific incident happened. Here is what the monitoring showed. Here is the ar
 
 **Strength: High.** Combines diagnosis and design. Forces reasoning about failure modes rather than ideal-state patterns. Closest in structure to node-internals exercises — the learner reasons against evidence, not a blank specification.
 
-**Key requirement:** The incident must be specific and the evidence must be sufficient to diagnose the root cause without guessing. This pattern benefits most from embedded artifacts — timelines, metrics tables, architecture diagrams.
+**Key requirement:** The incident must be specific and the evidence must be sufficient to diagnose the root cause without guessing. This pattern benefits most from embedded artifacts — timelines, metrics tables, architecture diagrams. At least one data point in the evidence should require careful reading to notice — a single timeline entry, an anomaly in the metrics table, a detail in the architecture diagram. If every data point is immediately legible, the diagnostic work is too easy.
 
 ---
 
@@ -164,7 +187,7 @@ graph TD
 
 ```markdown
 | Time (UTC) | Queue Depth | Active Workers | Error Rate | p99 Latency |
-|------------|-------------|----------------|------------|-------------|
+| ---------- | ----------- | -------------- | ---------- | ----------- |
 | 03:00      | 12,000      | 4              | 0.1%       | 180ms       |
 | 03:15      | 45,000      | 4              | 0.8%       | 420ms       |
 | 03:20      | 180,000     | 4              | 14.2%      | 8,400ms     |
@@ -216,6 +239,16 @@ Write your analysis in `my-analysis.md`. Cover:
 4. What risks remain after your changes, and why they are acceptable
 ```
 
+**Tutorial hint**
+
+When the exercise involves a named pattern the learner should be familiar with, the tutorial hint in `README.md` files of exercises can point to it without spoiling the diagnostic task. The right framing: point to the concept, not to the diagnosis.
+
+> ✅ "If sliding window rate limiting is new to you, read `tutorial.md` first."
+
+> ❌ "If idempotency in distributed messaging is new to you, read `tutorial.md` first." — this signals the root cause category before the learner has started.
+
+When a scenario has a specific root cause the learner must discover, do not let the tutorial hint name that category. If the tutorial covers more than one relevant concept, point to the tutorial generally without naming the specific concept that unlocks the diagnosis.
+
 **How to Run section**
 
 Delete this section entirely. There is no runnable app.
@@ -233,6 +266,8 @@ Only include it if the exercise requires knowledge that cannot reasonably be ass
 Test: can someone who already knows this concept skip the file and still complete the exercise? If yes, the length is right.
 
 System design exercises are more likely than node-internals exercises to need a tutorial, because the relevant concepts (event sourcing, dual-write patterns, circuit breakers, saga patterns) have fewer canonical resources than Node.js internals and are less likely to be common knowledge. When in doubt, include a lean tutorial rather than assuming familiarity.
+
+**What a tutorial should not do:** explain the correct answer or signal the root cause. A tutorial covering distributed locking should explain the atomic `SET NX EX` pattern and why the two-step SETNX form is broken — not explain what happens when a lock's TTL is shorter than the job it protects. The former is background. The latter is the exercise.
 
 ---
 
@@ -257,6 +292,10 @@ Every rubric item must explain what breaks, degrades, or fails when this is miss
 **The "questions first" dimension**
 
 At least one rubric item per exercise should surface a question the learner should have asked before proposing any design. This is the senior dimension that standard system design resources never test. A senior who jumps to a solution without naming the dominant constraint is doing mid-level work even if the solution is correct.
+
+**The "conditions that break the generic answer" dimension**
+
+For exercises involving named patterns, at least one rubric item should name the specific condition in the scenario that a generic answer gets wrong. This is where the teaching happens — not in confirming that the learner knew the pattern, but in confirming they found where this scenario's conditions diverged from the textbook case.
 
 **Rubric structure**
 
@@ -326,6 +365,7 @@ Run every rubric item through these checks before the exercise is finalized:
 - [ ] Would a mid-level engineer who completed the exercise honestly miss this?
 - [ ] Is it diagnosable from the scenario and artifacts given, without information not provided?
 - [ ] Does at least one item per exercise surface a question the learner should have asked before designing?
+- [ ] For exercises involving named patterns: does at least one item name the specific condition that breaks a generic answer?
 
 ---
 
@@ -333,8 +373,9 @@ Run every rubric item through these checks before the exercise is finalized:
 
 Before an exercise is considered complete:
 
-- [ ] Does it pass the litmus test? Can it be solved by regurgitating a system design book? If yes, it is not ready.
+- [ ] Does it pass the litmus test? Can a candidate produce a correct answer without reasoning through the specific conditions given? If yes, it is not ready.
 - [ ] Does the scenario name something specific that is failing, changing, or in conflict — not just a system to design?
+- [ ] Does the tutorial hint, if present, point to the concept without signaling the root cause or diagnosis?
 - [ ] Does the task section explicitly ask for the questions the learner would ask before proposing anything?
 - [ ] Does every rubric item pass the rubric item checklist above?
 - [ ] Are embedded artifacts sufficient to diagnose the problem without guessing? No artifact should require information not present in the README.
