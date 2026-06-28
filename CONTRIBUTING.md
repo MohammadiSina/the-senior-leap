@@ -56,6 +56,14 @@ Include:
 - How to run the app, if applicable
 - A pointer to `tutorial.md` (optional background) and a reminder not to open `rubric.md` before attempting
 
+**The tutorial hint.** When pointing learners to `tutorial.md`, name the concept — not the diagnosis. The hint should tell learners what background they need, not signal what the root cause is.
+
+> ✅ "If distributed locking is new to you, read `tutorial.md` first."
+
+> ❌ "If lock expiry and job duration interactions are new to you, read `tutorial.md` first." — this names the failure mode before the learner has started.
+
+If the tutorial covers more than one relevant concept, point to it generally rather than naming the specific concept that unlocks the diagnosis.
+
 ### `tutorial.md` — Background Knowledge
 
 Only what the user needs to attempt the exercise. Not a comprehensive guide — a targeted primer.
@@ -63,6 +71,9 @@ Only what the user needs to attempt the exercise. Not a comprehensive guide — 
 A useful test: if the user already knows this concept well, can they skip this file entirely and still do the exercise? If yes, the tutorial is the right length. If skipping it leaves gaps, it needs more.
 
 Some exercises won't need a tutorial at all. Don't force one.
+
+**What a tutorial should not do:** explain the correct answer or signal the root cause. 
+Cover the concept and its mechanics — not the specific way this exercise's conditions cause it to fail. The moment you explain the failure, you've done the exercise for the learner.
 
 ### `rubric.md` — What a Senior Would Notice
 
@@ -103,9 +114,11 @@ Document setup inside the exercise `README.md`, not in a separate file.
 
 Before opening a PR, run through this honestly:
 
+- [ ] Can a candidate produce a correct answer without reasoning through the specific conditions given in this scenario? If yes, the scenario is not ready.
 - [ ] Did you complete the exercise yourself, from scratch, as a user would?
 - [ ] Does the rubric surface things a mid-level engineer would genuinely miss?
 - [ ] Does the scenario feel like something from a real codebase, not a constructed example?
+- [ ] Does the tutorial hint name a concept — not the diagnosis or root cause?
 - [ ] If there's a runnable app, does it work on a clean setup with one or two commands?
 - [ ] Is the tutorial lean enough that someone who knows the topic can skip it without missing anything for the exercise?
 - [ ] Are there three to five focused rubric items rather than an exhaustive list?
