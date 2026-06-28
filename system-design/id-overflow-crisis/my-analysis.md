@@ -1,4 +1,4 @@
-# My Analysis — id-overflow-crisis
+# My Analysis — ID Overflow Crisis
 
 > Fill this in before opening `rubric.md` or `solution/`.
 > Honesty with yourself here is the whole point — the rubric only helps if you haven't already read it.

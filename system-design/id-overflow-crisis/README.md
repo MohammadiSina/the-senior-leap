@@ -1,4 +1,4 @@
-# id-overflow-crisis
+# ID Overflow Crisis
 
 > Your `users` table primary key hits INT max in 14 weeks. The table has 1.8 billion rows, writes are running at 90,000 per hour, and there is no maintenance window. There has never been a maintenance window.
 
@@ -34,15 +34,15 @@ graph TD
     U --> R
 ```
 
-| Table | Approximate Rows | Notes |
-|-------|-----------------|-------|
-| users | 1,832M | The table being migrated |
-| notifications | ~4,300M | Largest child table; notification fan-out from campaigns |
-| user_preferences | ~1,832M | 1:1 with users; user_id is both FK and PK |
-| audit_log | ~2,100M | audit_log.id is already BIGINT — migrated 18 months ago for the same reason |
-| sessions | ~500M | |
-| orders | ~180M | |
-| referrals | ~120M | Two FK columns referencing users.id: referrer_id and referred_id |
+| Table            | Approximate Rows | Notes                                                                       |
+| ---------------- | ---------------- | --------------------------------------------------------------------------- |
+| users            | 1,832M           | The table being migrated                                                    |
+| notifications    | ~4,300M          | Largest child table; notification fan-out from campaigns                    |
+| user_preferences | ~1,832M          | 1:1 with users; user_id is both FK and PK                                   |
+| audit_log        | ~2,100M          | audit_log.id is already BIGINT — migrated 18 months ago for the same reason |
+| sessions         | ~500M            |                                                                             |
+| orders           | ~180M            |                                                                             |
+| referrals        | ~120M            | Two FK columns referencing users.id: referrer_id and referred_id            |
 
 The sequence backing `users.id` is `users_id_seq`. Its current value is 1,832,000,000. Its declared type is `integer`.
 

@@ -1,4 +1,4 @@
-# Rubric — id-overflow-crisis
+# Rubric — ID Overflow Crisis
 
 > Open this only after writing your analysis in `my-analysis.md`.
 > The rubric works best as a mirror, not a guide.
