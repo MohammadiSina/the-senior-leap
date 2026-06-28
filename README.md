@@ -2,6 +2,7 @@
 
 > Hands-on exercises, rubrics, and AI-assisted evaluation for engineers closing the gap to senior.
 
+---
 
 ## The Problem
 
@@ -14,6 +15,7 @@ That gap is what separates senior engineers from mid-level ones. A mid-level eng
 **Most resources teach you *what* senior engineers know.\
 This repo makes you practice *how* they think.**
 
+---
 
 ## Getting Started
 
@@ -26,6 +28,7 @@ cd the-senior-leap
 
 Pick a topic and start with an exercise. No global setup required - each exercise documents its own setup. Most runnable apps start with `npm install && node index.js`; multi-service exercises use Docker Compose.
 
+---
 
 ## How It Works
 
@@ -52,6 +55,7 @@ topic/exercise-name/
 
 The rubric is not a pass/fail test. It's written from the perspective of a senior engineer reviewing your analysis or your PR - the things they'd flag, the questions they'd ask, the failure modes you hadn't considered.
 
+---
 
 ## Topics
 
@@ -67,6 +71,7 @@ The rubric is not a pass/fail test. It's written from the perspective of a senio
 | Technical Writing | Real decisions documented with their tradeoffs intact              |
 | Security          | Vulnerabilities that hide behind plausible-looking implementations |
 
+---
 
 ## AI Evaluator
 
@@ -92,6 +97,7 @@ Supports local models through Ollama, plus cloud options including Anthropic, Op
 
 See [`ai-evaluator/README.md`](./ai-evaluator/README.md) for full setup and configuration.
 
+---
 
 ## Contributing
 
@@ -99,6 +105,7 @@ The best exercises come from real experience. If you've debugged a gnarly produc
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the exercise template and what makes a good exercise.
 
+---
 
 ## License
 
